@@ -13,8 +13,7 @@ class Book {
     private String title;
     private String author;
 
-    public Book(Long id, String title, String author) {
-        this.id = id;
+    public Book(String title, String author) {
         this.title = title;
         this.author = author;
     }
