@@ -1,8 +1,11 @@
 package com.pergamumlibraryness;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -43,6 +46,16 @@ class BookController {
         return CollectionModel.of(Books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
     // end::get-aggregate-root[]
+
+    @GetMapping("/books/sort_by=asc(author)")
+    CollectionModel<EntityModel<Book>> allSortedByAuthor() {
+
+        List<EntityModel<Book>> Books = repository.findAll(Sort.by(Sort.Direction.ASC, "author","title")).stream() //
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(Books, linkTo(methodOn(BookController.class).all()).withSelfRel());
+    }
 
     @PostMapping("/books")
     ResponseEntity<?> newBook(@RequestBody Book newBook) {
